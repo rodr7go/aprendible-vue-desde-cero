@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Aprendiendo VueJS</title>
+</head>
+<body>
+	<div id="app">
+		<h1>Hola {{ message }}</h1>
+		<input type="text" v-model="message">
+	</div>
+	
+	<script src="https://unpkg.com/vue"></script>
+	<script>
+		var app = new Vue({
+			el: '#app',
+			data: {
+				message: "Aprendible"
+			}
+		});
+	</script>
+</body>
+</html>
