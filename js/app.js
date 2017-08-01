@@ -1,33 +1,27 @@
-Vue.component('user', {
-	props: ['name', 'lastName'],
+Vue.component('tasks', {
+	template: `<div>
+		<h1>Lista de tareas</h1>
+		<h4 v-if="completed">Tareas completas: {{ completed }}</h4>
+		<h4 v-if="incompleted">Tareas incompletas: {{ incompleted }}</h4>
+		<ul>
+			<li is="task" v-for="task in tasks" :task="task"></li>
+			<li class="form-inline">
+				<input v-on:keyup.enter="add" v-model="newTask" type="text" class="form-control">
+			</li>
+		</ul>
+	</div>`,
 	data: function(){
 		return {
-			app: {
-				name: 'Aprendible'
-			}
+			newTask: "",
+			tasks: [
+				{title: "Aprender PHP", completed: true},
+				{title: "Aprender Laravel", completed: false},
+				{title: "Aprender VueJS", completed: false}
+			]
 		}
 	},
-	template: `<div>
-		<h1>Usuario de {{ app.name }}</h1>
-		<h2>Nombre: {{ name }} {{ lastName }}</h2>
-		<input v-model="name" />
-		<input v-model="app.name" />
-	</div>`
-});
-
-
-var app = new Vue({
-	el: '#app',
-	data: {
-		newTask: "",
-		tasks: [
-			{title: "Aprender PHP", completed: true},
-			{title: "Aprender Laravel", completed: false},
-			{title: "Aprender VueJS", completed: false}
-		]
-	},
 	methods: {
-		addTask: function(){
+		add: function(){
 			if (this.newTask.length <= 1) return alert('La tarea no puede estar vacía');
 
 			this.tasks.push({
@@ -35,25 +29,42 @@ var app = new Vue({
 				completed: false
 			});
 			this.newTask = "";
-		},
-		completeTask: function(task){
-			task.completed = ! task.completed;
-		},
-		taskClasses: function(task){
-			console.log('css changed');
-			return ['glyphicon', task.completed ? 'glyphicon-check' : 'glyphicon-unchecked'];
 		}
 	},
-	computed: {
-		completedTasks: function(){
+	computed:{
+		completed: function(){
 			return this.tasks.filter(function(task){
 				return task.completed;
 			}).length;
 		},
-		incompletedTasks: function(){
+		incompleted: function(){
 			return this.tasks.filter(function(task){
 				return ! task.completed;
 			}).length;
 		}
 	}
 });
+
+Vue.component('task', {
+	props: ['task'],
+	template: `<li>
+		<span v-text="task.title"></span>
+		<span @click="complete()" :class="classes"></span>
+	</li>`,
+	methods: {
+		complete: function(){
+			this.task.completed = ! this.task.completed;
+		}
+	},
+	computed: {
+		classes: function(){
+			console.log('css changed');
+			return ['glyphicon', this.task.completed ? 'glyphicon-check' : 'glyphicon-unchecked'];
+		},
+	}
+});
+
+var app = new Vue({el: '#app'});
+
+
+
