@@ -2,14 +2,14 @@ Vue.component('tasks', {
 	template: `<section class="todoapp">
 		<header class="header">
 			<h1>Tareas</h1>
-			<input v-on:keyup.enter="add" v-model="newTask" type="text" class="new-todo">
+			<input v-on:keyup.enter="add" v-model="newTask" type="text" class="new-todo" placeholder="Qué necesitas hacer?">
 		</header>
 		<section>
 			<ul class="todo-list">
 				<li class="todo" is="task" v-for="task in tasks" :task="task"></li>
 			</ul>
 		</section>
-		<footer class="footer">
+		<footer class="footer" v-show="tasks.length">
 			<span class="todo-count">Completas: {{ completed }} | Incompletas: {{ incompleted }}</span>
 		</footer>
 	</section>`,
@@ -54,8 +54,16 @@ Vue.component('task', {
 		<div class="view">
 			<input class="toggle" type="checkbox" v-model="task.completed"  />
 			<label v-text="task.title"></label>
+			<button class="destroy" @click="remove()"></button>
 		</div>
 	</li>`,
+	methods: {
+		remove: function (){
+			var tasks = this.$parent.tasks;
+
+			tasks.splice(tasks.indexOf(this.task), 1);
+		}
+	},
 	computed: {
 		classes: function(){
 			return { completed: this.task.completed };
