@@ -1,15 +1,18 @@
 Vue.component('tasks', {
-	template: `<div>
-		<h1>Lista de tareas</h1>
-		<h4 v-if="completed">Tareas completas: {{ completed }}</h4>
-		<h4 v-if="incompleted">Tareas incompletas: {{ incompleted }}</h4>
-		<ul>
-			<li is="task" v-for="task in tasks" :task="task"></li>
-			<li class="form-inline">
-				<input v-on:keyup.enter="add" v-model="newTask" type="text" class="form-control">
-			</li>
-		</ul>
-	</div>`,
+	template: `<section class="todoapp">
+		<header class="header">
+			<h1>Tareas</h1>
+			<input v-on:keyup.enter="add" v-model="newTask" type="text" class="new-todo">
+		</header>
+		<section>
+			<ul class="todo-list">
+				<li class="todo" is="task" v-for="task in tasks" :task="task"></li>
+			</ul>
+		</section>
+		<footer class="footer">
+			<span class="todo-count">Completas: {{ completed }} | Incompletas: {{ incompleted }}</span>
+		</footer>
+	</section>`,
 	data: function(){
 		return {
 			newTask: "",
@@ -47,24 +50,17 @@ Vue.component('tasks', {
 
 Vue.component('task', {
 	props: ['task'],
-	template: `<li>
-		<span v-text="task.title"></span>
-		<span @click="complete()" :class="classes"></span>
+	template: `<li :class="classes">
+		<div class="view">
+			<input class="toggle" type="checkbox" v-model="task.completed"  />
+			<label v-text="task.title"></label>
+		</div>
 	</li>`,
-	methods: {
-		complete: function(){
-			this.task.completed = ! this.task.completed;
-		}
-	},
 	computed: {
 		classes: function(){
-			console.log('css changed');
-			return ['glyphicon', this.task.completed ? 'glyphicon-check' : 'glyphicon-unchecked'];
+			return { completed: this.task.completed };
 		},
 	}
 });
 
 var app = new Vue({el: '#app'});
-
-
-
