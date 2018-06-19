@@ -2,7 +2,7 @@ Vue.component('tasks', {
 	template: `<section class="todoapp">
 		<header class="header">
 			<h1>Tareas</h1>
-			<input v-on:keyup.enter="add" v-model="newTask" type="text" class="new-todo" placeholder="Qué necesitas hacer?">
+			<input v-on:keyup.enter="add" v-model="newTask" type="text" class="new-todo" placeholder="Qué deseas hacer?">
 		</header>
 		<section>
 			<ul class="todo-list">
@@ -53,11 +53,39 @@ Vue.component('task', {
 	template: `<li :class="classes">
 		<div class="view">
 			<input class="toggle" type="checkbox" v-model="task.completed"  />
-			<label v-text="task.title"></label>
+			<label v-text="task.title" @dblclick="edit()"></label>
 			<button class="destroy" @click="remove()"></button>
 		</div>
+		<input class="edit"
+			v-model="task.title"
+			@keyup.enter="doneEdit()"
+			@blur="doneEdit()"
+			@keyup.esc="cancelEdit()"
+		>
 	</li>`,
+	data: function(){
+		return {
+			editing: false,
+			cacheBeforeEdit: ''
+		}
+	},
 	methods: {
+		edit: function(){
+			this.cacheBeforeEdit = this.task.title;
+			this.editing = true;
+		},
+		doneEdit: function(){
+			if(! this.task.title)
+			{
+				this.remove();
+			}
+
+			this.editing = false;
+		},
+		cancelEdit: function(){
+			this.editing = false;
+			this.task.title = this.cacheBeforeEdit;
+		},
 		remove: function (){
 			var tasks = this.$parent.tasks;
 
@@ -66,7 +94,7 @@ Vue.component('task', {
 	},
 	computed: {
 		classes: function(){
-			return { completed: this.task.completed };
+			return { completed: this.task.completed, editing: this.editing };
 		},
 	}
 });
