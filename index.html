@@ -6,8 +6,17 @@
 </head>
 <body>
 	<div id="app">
-		<h1>Hola {{ message }}</h1>
-		<input type="text" v-model="message">
+<!--		<h1 v-if="message.length > 2" v-text="`hola ${message}`"></h1>-->
+<!--		<h1 v-else>Por favor escribe tu nombre</h1>-->
+<!--		<input type="text" v-model="message">-->
+		<h1>Lista de tareas</h1>
+		<ul>
+			<li v-for="tarea in tareas">
+				<span v-text="tarea.title"></span>
+				<small v-if="tarea.completed">Completa</small>
+				<small v-else>Incompleta</small>
+			</li>
+		</ul>
 	</div>
 	
 	<script src="https://unpkg.com/vue"></script>
@@ -15,7 +24,12 @@
 		let app = new Vue({
 			el: '#app',
 			data: {
-				message: "mensaje"
+				message: "mensaje",
+				tareas: [
+					{ title: 'Aprender PHP', completed: true },
+					{ title: 'Aprender laravel', completed: true },
+					{ title: 'Aprender Vue', completed: false },
+				]
 			}
 		});
 	</script>
