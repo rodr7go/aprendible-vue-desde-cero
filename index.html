@@ -3,33 +3,65 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Aprendiendo VueJS</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+
+	<style>
+		.fas {
+			cursor: pointer;
+		}
+	</style>
 </head>
 <body>
-	<div id="app">
-<!--		<h1 v-if="message.length > 2" v-text="`hola ${message}`"></h1>-->
-<!--		<h1 v-else>Por favor escribe tu nombre</h1>-->
-<!--		<input type="text" v-model="message">-->
-		<h1>Lista de tareas</h1>
-		<ul>
-			<li v-for="tarea in tareas">
-				<span v-text="tarea.title"></span>
-				<small v-if="tarea.completed">Completa</small>
-				<small v-else>Incompleta</small>
-			</li>
-		</ul>
+	<div class="container">
+		<div id="app">
+			<!--		<h1 v-if="message.length > 2" v-text="`hola ${message}`"></h1>-->
+			<!--		<h1 v-else>Por favor escribe tu nombre</h1>-->
+			<!--		<input type="text" v-model="message">-->
+
+			<!--		<button @click="reverse">Invertir</button>-->
+
+			<h1>Lista de tareas</h1>
+			<ul>
+				<li v-for="task in tasks">
+					<span v-text="task.title"></span>
+					<i @click="task.completed = false" v-if="task.completed" class="fas fa-check-square"></i>
+					<i @click="task.completed = true" v-else class="fas fa-times-circle"></i>
+
+				</li>
+				<li class="form-inline">
+					<input @keyup.enter="addTask" v-model="newTask" type="text" class="form-control">
+					<button @click="addTask" class="btn btn-primary">+</button>
+				</li>
+			</ul>
+		</div>
 	</div>
-	
 	<script src="https://unpkg.com/vue"></script>
 	<script>
 		let app = new Vue({
 			el: '#app',
 			data: {
 				message: "mensaje",
-				tareas: [
+				newTask: '',
+				tasks: [
 					{ title: 'Aprender PHP', completed: true },
 					{ title: 'Aprender laravel', completed: true },
 					{ title: 'Aprender Vue', completed: false },
 				]
+			},
+			methods: {
+				// reverse() {
+				// 	this.message = this.message.split('').reverse().join('')
+				// }
+
+				addTask() {
+					if (this.newTask.length <=1) return;
+					this.tasks.push({
+						title: this.newTask,
+						completed: false
+					})
+					this.newTask = ''
+				}
 			}
 		});
 	</script>
